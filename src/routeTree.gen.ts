@@ -15,12 +15,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as DriverRegisterRouteImport } from './routes/driver.register'
+import { Route as DriverProfileRouteImport } from './routes/driver.profile'
 import { Route as DriverPendingRouteImport } from './routes/driver.pending'
 import { Route as DriverNotificationsRouteImport } from './routes/driver.notifications'
 import { Route as DriverEarningsRouteImport } from './routes/driver.earnings'
 import { Route as DriverBookingsRouteImport } from './routes/driver.bookings'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
 import { Route as CustomerSosRouteImport } from './routes/customer.sos'
+import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
 import { Route as DriverActiveIdRouteImport } from './routes/driver.active.$id'
@@ -57,6 +59,11 @@ const DriverRegisterRoute = DriverRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => DriverRoute,
 } as any)
+const DriverProfileRoute = DriverProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DriverRoute,
+} as any)
 const DriverPendingRoute = DriverPendingRouteImport.update({
   id: '/pending',
   path: '/pending',
@@ -85,6 +92,11 @@ const CustomerSupportRoute = CustomerSupportRouteImport.update({
 const CustomerSosRoute = CustomerSosRouteImport.update({
   id: '/sos',
   path: '/sos',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerProfileRoute = CustomerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
@@ -119,12 +131,14 @@ export interface FileRoutesByFullPath {
   '/driver': typeof DriverRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
+  '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
@@ -136,12 +150,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
+  '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer': typeof CustomerIndexRoute
   '/driver': typeof DriverIndexRoute
@@ -156,12 +172,14 @@ export interface FileRoutesById {
   '/driver': typeof DriverRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
+  '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
@@ -177,12 +195,14 @@ export interface FileRouteTypes {
     | '/driver'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/profile'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/pending'
+    | '/driver/profile'
     | '/driver/register'
     | '/customer/'
     | '/driver/'
@@ -194,12 +214,14 @@ export interface FileRouteTypes {
     | '/'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/profile'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/pending'
+    | '/driver/profile'
     | '/driver/register'
     | '/customer'
     | '/driver'
@@ -213,12 +235,14 @@ export interface FileRouteTypes {
     | '/driver'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/profile'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/pending'
+    | '/driver/profile'
     | '/driver/register'
     | '/customer/'
     | '/driver/'
@@ -277,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverRegisterRouteImport
       parentRoute: typeof DriverRoute
     }
+    '/driver/profile': {
+      id: '/driver/profile'
+      path: '/profile'
+      fullPath: '/driver/profile'
+      preLoaderRoute: typeof DriverProfileRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/driver/pending': {
       id: '/driver/pending'
       path: '/pending'
@@ -317,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/sos'
       fullPath: '/customer/sos'
       preLoaderRoute: typeof CustomerSosRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/profile': {
+      id: '/customer/profile'
+      path: '/profile'
+      fullPath: '/customer/profile'
+      preLoaderRoute: typeof CustomerProfileRouteImport
       parentRoute: typeof CustomerRoute
     }
     '/customer/notifications': {
@@ -360,6 +398,7 @@ declare module '@tanstack/react-router' {
 interface CustomerRouteChildren {
   CustomerBookingsRoute: typeof CustomerBookingsRoute
   CustomerNotificationsRoute: typeof CustomerNotificationsRoute
+  CustomerProfileRoute: typeof CustomerProfileRoute
   CustomerSosRoute: typeof CustomerSosRoute
   CustomerSupportRoute: typeof CustomerSupportRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
@@ -370,6 +409,7 @@ interface CustomerRouteChildren {
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerBookingsRoute: CustomerBookingsRoute,
   CustomerNotificationsRoute: CustomerNotificationsRoute,
+  CustomerProfileRoute: CustomerProfileRoute,
   CustomerSosRoute: CustomerSosRoute,
   CustomerSupportRoute: CustomerSupportRoute,
   CustomerIndexRoute: CustomerIndexRoute,
@@ -386,6 +426,7 @@ interface DriverRouteChildren {
   DriverEarningsRoute: typeof DriverEarningsRoute
   DriverNotificationsRoute: typeof DriverNotificationsRoute
   DriverPendingRoute: typeof DriverPendingRoute
+  DriverProfileRoute: typeof DriverProfileRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
   DriverIndexRoute: typeof DriverIndexRoute
   DriverActiveIdRoute: typeof DriverActiveIdRoute
@@ -396,6 +437,7 @@ const DriverRouteChildren: DriverRouteChildren = {
   DriverEarningsRoute: DriverEarningsRoute,
   DriverNotificationsRoute: DriverNotificationsRoute,
   DriverPendingRoute: DriverPendingRoute,
+  DriverProfileRoute: DriverProfileRoute,
   DriverRegisterRoute: DriverRegisterRoute,
   DriverIndexRoute: DriverIndexRoute,
   DriverActiveIdRoute: DriverActiveIdRoute,
@@ -412,13 +454,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
