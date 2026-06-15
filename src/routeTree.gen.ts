@@ -16,6 +16,7 @@ import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as DriverRegisterRouteImport } from './routes/driver.register'
 import { Route as DriverPendingRouteImport } from './routes/driver.pending'
+import { Route as DriverEarningsRouteImport } from './routes/driver.earnings'
 import { Route as DriverBookingsRouteImport } from './routes/driver.bookings'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
 import { Route as CustomerSosRouteImport } from './routes/customer.sos'
@@ -58,6 +59,11 @@ const DriverRegisterRoute = DriverRegisterRouteImport.update({
 const DriverPendingRoute = DriverPendingRouteImport.update({
   id: '/pending',
   path: '/pending',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverEarningsRoute = DriverEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
   getParentRoute: () => DriverRoute,
 } as any)
 const DriverBookingsRoute = DriverBookingsRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer': typeof CustomerIndexRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
+    | '/driver/earnings'
     | '/driver/pending'
     | '/driver/register'
     | '/customer/'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
+    | '/driver/earnings'
     | '/driver/pending'
     | '/driver/register'
     | '/customer'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
+    | '/driver/earnings'
     | '/driver/pending'
     | '/driver/register'
     | '/customer/'
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/pending'
       fullPath: '/driver/pending'
       preLoaderRoute: typeof DriverPendingRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/earnings': {
+      id: '/driver/earnings'
+      path: '/earnings'
+      fullPath: '/driver/earnings'
+      preLoaderRoute: typeof DriverEarningsRouteImport
       parentRoute: typeof DriverRoute
     }
     '/driver/bookings': {
@@ -345,6 +364,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 
 interface DriverRouteChildren {
   DriverBookingsRoute: typeof DriverBookingsRoute
+  DriverEarningsRoute: typeof DriverEarningsRoute
   DriverPendingRoute: typeof DriverPendingRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
   DriverIndexRoute: typeof DriverIndexRoute
@@ -353,6 +373,7 @@ interface DriverRouteChildren {
 
 const DriverRouteChildren: DriverRouteChildren = {
   DriverBookingsRoute: DriverBookingsRoute,
+  DriverEarningsRoute: DriverEarningsRoute,
   DriverPendingRoute: DriverPendingRoute,
   DriverRegisterRoute: DriverRegisterRoute,
   DriverIndexRoute: DriverIndexRoute,
