@@ -9,38 +9,246 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DriverRouteImport } from './routes/driver'
+import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DriverIndexRouteImport } from './routes/driver.index'
+import { Route as CustomerIndexRouteImport } from './routes/customer.index'
+import { Route as DriverRegisterRouteImport } from './routes/driver.register'
+import { Route as DriverPendingRouteImport } from './routes/driver.pending'
+import { Route as DriverNotificationsRouteImport } from './routes/driver.notifications'
+import { Route as DriverEarningsRouteImport } from './routes/driver.earnings'
+import { Route as DriverBookingsRouteImport } from './routes/driver.bookings'
+import { Route as CustomerSupportRouteImport } from './routes/customer.support'
+import { Route as CustomerSosRouteImport } from './routes/customer.sos'
+import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
+import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
+import { Route as DriverActiveIdRouteImport } from './routes/driver.active.$id'
+import { Route as CustomerTrackIdRouteImport } from './routes/customer.track.$id'
+import { Route as CustomerBookServiceRouteImport } from './routes/customer.book.$service'
 
+const DriverRoute = DriverRouteImport.update({
+  id: '/driver',
+  path: '/driver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomerRoute = CustomerRouteImport.update({
+  id: '/customer',
+  path: '/customer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DriverIndexRoute = DriverIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DriverRoute,
+} as any)
+const CustomerIndexRoute = CustomerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const DriverRegisterRoute = DriverRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverPendingRoute = DriverPendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverNotificationsRoute = DriverNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverEarningsRoute = DriverEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverBookingsRoute = DriverBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => DriverRoute,
+} as any)
+const CustomerSupportRoute = CustomerSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerSosRoute = CustomerSosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const DriverActiveIdRoute = DriverActiveIdRouteImport.update({
+  id: '/active/$id',
+  path: '/active/$id',
+  getParentRoute: () => DriverRoute,
+} as any)
+const CustomerTrackIdRoute = CustomerTrackIdRouteImport.update({
+  id: '/track/$id',
+  path: '/track/$id',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerBookServiceRoute = CustomerBookServiceRouteImport.update({
+  id: '/book/$service',
+  path: '/book/$service',
+  getParentRoute: () => CustomerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/customer': typeof CustomerRouteWithChildren
+  '/driver': typeof DriverRouteWithChildren
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
+  '/customer/support': typeof CustomerSupportRoute
+  '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/pending': typeof DriverPendingRoute
+  '/driver/register': typeof DriverRegisterRoute
+  '/customer/': typeof CustomerIndexRoute
+  '/driver/': typeof DriverIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
+  '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
+  '/customer/support': typeof CustomerSupportRoute
+  '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/pending': typeof DriverPendingRoute
+  '/driver/register': typeof DriverRegisterRoute
+  '/customer': typeof CustomerIndexRoute
+  '/driver': typeof DriverIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
+  '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/customer': typeof CustomerRouteWithChildren
+  '/driver': typeof DriverRouteWithChildren
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
+  '/customer/support': typeof CustomerSupportRoute
+  '/driver/bookings': typeof DriverBookingsRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/pending': typeof DriverPendingRoute
+  '/driver/register': typeof DriverRegisterRoute
+  '/customer/': typeof CustomerIndexRoute
+  '/driver/': typeof DriverIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
+  '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/customer'
+    | '/driver'
+    | '/customer/bookings'
+    | '/customer/notifications'
+    | '/customer/sos'
+    | '/customer/support'
+    | '/driver/bookings'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/pending'
+    | '/driver/register'
+    | '/customer/'
+    | '/driver/'
+    | '/customer/book/$service'
+    | '/customer/track/$id'
+    | '/driver/active/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/customer/bookings'
+    | '/customer/notifications'
+    | '/customer/sos'
+    | '/customer/support'
+    | '/driver/bookings'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/pending'
+    | '/driver/register'
+    | '/customer'
+    | '/driver'
+    | '/customer/book/$service'
+    | '/customer/track/$id'
+    | '/driver/active/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/customer'
+    | '/driver'
+    | '/customer/bookings'
+    | '/customer/notifications'
+    | '/customer/sos'
+    | '/customer/support'
+    | '/driver/bookings'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/pending'
+    | '/driver/register'
+    | '/customer/'
+    | '/driver/'
+    | '/customer/book/$service'
+    | '/customer/track/$id'
+    | '/driver/active/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CustomerRoute: typeof CustomerRouteWithChildren
+  DriverRoute: typeof DriverRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/driver': {
+      id: '/driver'
+      path: '/driver'
+      fullPath: '/driver'
+      preLoaderRoute: typeof DriverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customer': {
+      id: '/customer'
+      path: '/customer'
+      fullPath: '/customer'
+      preLoaderRoute: typeof CustomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +256,159 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/driver/': {
+      id: '/driver/'
+      path: '/'
+      fullPath: '/driver/'
+      preLoaderRoute: typeof DriverIndexRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/customer/': {
+      id: '/customer/'
+      path: '/'
+      fullPath: '/customer/'
+      preLoaderRoute: typeof CustomerIndexRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/driver/register': {
+      id: '/driver/register'
+      path: '/register'
+      fullPath: '/driver/register'
+      preLoaderRoute: typeof DriverRegisterRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/pending': {
+      id: '/driver/pending'
+      path: '/pending'
+      fullPath: '/driver/pending'
+      preLoaderRoute: typeof DriverPendingRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/notifications': {
+      id: '/driver/notifications'
+      path: '/notifications'
+      fullPath: '/driver/notifications'
+      preLoaderRoute: typeof DriverNotificationsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/earnings': {
+      id: '/driver/earnings'
+      path: '/earnings'
+      fullPath: '/driver/earnings'
+      preLoaderRoute: typeof DriverEarningsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/bookings': {
+      id: '/driver/bookings'
+      path: '/bookings'
+      fullPath: '/driver/bookings'
+      preLoaderRoute: typeof DriverBookingsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/customer/support': {
+      id: '/customer/support'
+      path: '/support'
+      fullPath: '/customer/support'
+      preLoaderRoute: typeof CustomerSupportRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/sos': {
+      id: '/customer/sos'
+      path: '/sos'
+      fullPath: '/customer/sos'
+      preLoaderRoute: typeof CustomerSosRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/notifications': {
+      id: '/customer/notifications'
+      path: '/notifications'
+      fullPath: '/customer/notifications'
+      preLoaderRoute: typeof CustomerNotificationsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/bookings': {
+      id: '/customer/bookings'
+      path: '/bookings'
+      fullPath: '/customer/bookings'
+      preLoaderRoute: typeof CustomerBookingsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/driver/active/$id': {
+      id: '/driver/active/$id'
+      path: '/active/$id'
+      fullPath: '/driver/active/$id'
+      preLoaderRoute: typeof DriverActiveIdRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/customer/track/$id': {
+      id: '/customer/track/$id'
+      path: '/track/$id'
+      fullPath: '/customer/track/$id'
+      preLoaderRoute: typeof CustomerTrackIdRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/book/$service': {
+      id: '/customer/book/$service'
+      path: '/book/$service'
+      fullPath: '/customer/book/$service'
+      preLoaderRoute: typeof CustomerBookServiceRouteImport
+      parentRoute: typeof CustomerRoute
+    }
   }
 }
 
+interface CustomerRouteChildren {
+  CustomerBookingsRoute: typeof CustomerBookingsRoute
+  CustomerNotificationsRoute: typeof CustomerNotificationsRoute
+  CustomerSosRoute: typeof CustomerSosRoute
+  CustomerSupportRoute: typeof CustomerSupportRoute
+  CustomerIndexRoute: typeof CustomerIndexRoute
+  CustomerBookServiceRoute: typeof CustomerBookServiceRoute
+  CustomerTrackIdRoute: typeof CustomerTrackIdRoute
+}
+
+const CustomerRouteChildren: CustomerRouteChildren = {
+  CustomerBookingsRoute: CustomerBookingsRoute,
+  CustomerNotificationsRoute: CustomerNotificationsRoute,
+  CustomerSosRoute: CustomerSosRoute,
+  CustomerSupportRoute: CustomerSupportRoute,
+  CustomerIndexRoute: CustomerIndexRoute,
+  CustomerBookServiceRoute: CustomerBookServiceRoute,
+  CustomerTrackIdRoute: CustomerTrackIdRoute,
+}
+
+const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
+  CustomerRouteChildren,
+)
+
+interface DriverRouteChildren {
+  DriverBookingsRoute: typeof DriverBookingsRoute
+  DriverEarningsRoute: typeof DriverEarningsRoute
+  DriverNotificationsRoute: typeof DriverNotificationsRoute
+  DriverPendingRoute: typeof DriverPendingRoute
+  DriverRegisterRoute: typeof DriverRegisterRoute
+  DriverIndexRoute: typeof DriverIndexRoute
+  DriverActiveIdRoute: typeof DriverActiveIdRoute
+}
+
+const DriverRouteChildren: DriverRouteChildren = {
+  DriverBookingsRoute: DriverBookingsRoute,
+  DriverEarningsRoute: DriverEarningsRoute,
+  DriverNotificationsRoute: DriverNotificationsRoute,
+  DriverPendingRoute: DriverPendingRoute,
+  DriverRegisterRoute: DriverRegisterRoute,
+  DriverIndexRoute: DriverIndexRoute,
+  DriverActiveIdRoute: DriverActiveIdRoute,
+}
+
+const DriverRouteWithChildren =
+  DriverRoute._addFileChildren(DriverRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CustomerRoute: CustomerRouteWithChildren,
+  DriverRoute: DriverRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
