@@ -13,6 +13,7 @@ import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
+import { Route as CustomerSosRouteImport } from './routes/customer.sos'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
 import { Route as CustomerTrackIdRouteImport } from './routes/customer.track.$id'
@@ -36,6 +37,11 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
 const CustomerSupportRoute = CustomerSupportRouteImport.update({
   id: '/support',
   path: '/support',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerSosRoute = CustomerSosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/customer': typeof CustomerRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/customer': typeof CustomerIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/customer': typeof CustomerRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/sos'
     | '/customer/support'
     | '/customer/'
     | '/customer/book/$service'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/sos'
     | '/customer/support'
     | '/customer'
     | '/customer/book/$service'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/customer'
     | '/customer/bookings'
     | '/customer/notifications'
+    | '/customer/sos'
     | '/customer/support'
     | '/customer/'
     | '/customer/book/$service'
@@ -156,6 +168,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerSupportRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/sos': {
+      id: '/customer/sos'
+      path: '/sos'
+      fullPath: '/customer/sos'
+      preLoaderRoute: typeof CustomerSosRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/notifications': {
       id: '/customer/notifications'
       path: '/notifications'
@@ -190,6 +209,7 @@ declare module '@tanstack/react-router' {
 interface CustomerRouteChildren {
   CustomerBookingsRoute: typeof CustomerBookingsRoute
   CustomerNotificationsRoute: typeof CustomerNotificationsRoute
+  CustomerSosRoute: typeof CustomerSosRoute
   CustomerSupportRoute: typeof CustomerSupportRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
   CustomerBookServiceRoute: typeof CustomerBookServiceRoute
@@ -199,6 +219,7 @@ interface CustomerRouteChildren {
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerBookingsRoute: CustomerBookingsRoute,
   CustomerNotificationsRoute: CustomerNotificationsRoute,
+  CustomerSosRoute: CustomerSosRoute,
   CustomerSupportRoute: CustomerSupportRoute,
   CustomerIndexRoute: CustomerIndexRoute,
   CustomerBookServiceRoute: CustomerBookServiceRoute,
