@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
+import { Route as CustomerBookServiceRouteImport } from './routes/customer.book.$service'
 
 const CustomerRoute = CustomerRouteImport.update({
   id: '/customer',
@@ -28,28 +29,36 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerBookServiceRoute = CustomerBookServiceRouteImport.update({
+  id: '/book/$service',
+  path: '/book/$service',
+  getParentRoute: () => CustomerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
   '/customer/': typeof CustomerIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customer': typeof CustomerIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
   '/customer/': typeof CustomerIndexRoute
+  '/customer/book/$service': typeof CustomerBookServiceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/customer' | '/customer/'
+  fullPaths: '/' | '/customer' | '/customer/' | '/customer/book/$service'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/customer'
-  id: '__root__' | '/' | '/customer' | '/customer/'
+  to: '/' | '/customer' | '/customer/book/$service'
+  id: '__root__' | '/' | '/customer' | '/customer/' | '/customer/book/$service'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,15 +89,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerIndexRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/book/$service': {
+      id: '/customer/book/$service'
+      path: '/book/$service'
+      fullPath: '/customer/book/$service'
+      preLoaderRoute: typeof CustomerBookServiceRouteImport
+      parentRoute: typeof CustomerRoute
+    }
   }
 }
 
 interface CustomerRouteChildren {
   CustomerIndexRoute: typeof CustomerIndexRoute
+  CustomerBookServiceRoute: typeof CustomerBookServiceRoute
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerIndexRoute: CustomerIndexRoute,
+  CustomerBookServiceRoute: CustomerBookServiceRoute,
 }
 
 const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
