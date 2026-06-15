@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useApp, servicePricing, type ServiceType } from "@/lib/store";
 import { Clock, Sun, Calendar, CalendarRange, ChevronRight, Sparkles } from "lucide-react";
 import { StatusPill } from "@/components/app-chrome";
+
 
 export const Route = createFileRoute("/customer/")({
   component: CustomerHome,
@@ -16,10 +18,11 @@ const services: { key: ServiceType; icon: React.ElementType; gradient: string }[
 
 function CustomerHome() {
   const { user, bookings } = useApp();
-  const [mounted, setMounted] = (require("react") as typeof import("react")).useState(false);
-  (require("react") as typeof import("react")).useEffect(() => setMounted(true), []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const recent = bookings.slice(0, 3);
   const firstName = mounted ? (user?.name?.split(" ")[0] || "there") : "there";
+
 
   return (
     <div className="px-4 pt-4">
