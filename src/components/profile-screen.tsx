@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ChevronRight, LogOut, Calendar, PhoneCall, FileText, Gift, Wallet, Star, BadgeCheck, LifeBuoy } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronRight, LogOut, Calendar, FileText, Gift, Wallet, Star, BadgeCheck, LifeBuoy } from "lucide-react";
 import { useApp, type Role } from "@/lib/store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -13,24 +14,28 @@ type Item = {
 export function ProfileScreen({ role }: { role: Role }) {
   const { user, logout } = useApp();
   const nav = useNavigate();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const items: Item[] =
     role === "customer"
       ? [
           { to: "/customer/bookings", label: "My Bookings", icon: Calendar },
-          { to: "/customer/sos", label: "Emergency Contacts", icon: PhoneCall },
-          { to: "/customer/support", label: "GST Details", icon: FileText },
-          { to: "/customer/support", label: "Refer & Earn", icon: Gift },
+          { to: "/customer/gst", label: "GST Details", icon: FileText },
+          { to: "/customer/refer", label: "Refer & Earn", icon: Gift },
         ]
       : [
           { to: "/driver/bookings", label: "My Trips", icon: Calendar },
           { to: "/driver/earnings", label: "Earnings & Wallet", icon: Wallet },
-          { to: "/driver/notifications", label: "Ratings & Reviews", icon: Star },
-          { to: "/driver/notifications", label: "Verification Status", icon: BadgeCheck },
-          { to: "/driver/notifications", label: "Help & Support", icon: LifeBuoy },
+          { to: "/driver/reviews", label: "Ratings & Reviews", icon: Star },
+          { to: "/driver/verification", label: "Verification Status", icon: BadgeCheck },
+          { to: "/driver/support", label: "Help & Support", icon: LifeBuoy },
         ];
 
-  const initial = (user?.name?.trim()?.[0] || user?.email?.[0] || "U").toUpperCase();
+  const initial = mounted ? (user?.name?.trim()?.[0] || user?.email?.[0] || "U").toUpperCase() : "U";
+  const displayName = mounted ? (user?.name || "Guest User") : "Guest User";
+  const displayPhone = mounted ? (user?.phone || "+91 00000 00000") : "+91 00000 00000";
+  const displayEmail = mounted ? (user?.email || "guest@drivemate.app") : "guest@drivemate.app";
 
   return (
     <div className="app-shell space-y-5 p-4">
@@ -48,11 +53,9 @@ export function ProfileScreen({ role }: { role: Role }) {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <div className="truncate text-base font-semibold">
-              {user?.name || "Guest User"}
-            </div>
-            <div className="text-xs text-white/80">{user?.phone || "+91 00000 00000"}</div>
-            <div className="truncate text-xs text-white/70">{user?.email || "guest@drivemate.app"}</div>
+            <div className="truncate text-base font-semibold">{displayName}</div>
+            <div className="text-xs text-white/80">{displayPhone}</div>
+            <div className="truncate text-xs text-white/70">{displayEmail}</div>
           </div>
         </div>
       </div>
