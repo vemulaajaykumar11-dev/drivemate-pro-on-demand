@@ -19,14 +19,12 @@ function DriverHome() {
   const { driverStatus, setDriverStatus, pendingDriverRequests, acceptRequest, rejectRequest, bookings, user, driverVerification } = useApp();
   const nav = useNavigate();
 
-  if (driverVerification === "none") {
-    nav({ to: "/driver/register" });
-    return null;
-  }
-  if (driverVerification === "pending") {
-    nav({ to: "/driver/pending" });
-    return null;
-  }
+  useEffect(() => {
+    if (driverVerification === "none") nav({ to: "/driver/register" });
+    else if (driverVerification === "pending") nav({ to: "/driver/pending" });
+  }, [driverVerification, nav]);
+
+  if (driverVerification !== "approved") return null;
 
   const activeTrips = bookings.filter((b) => ["accepted", "enroute", "arrived", "started"].includes(b.status) && b.driverName === (user?.name || "You"));
 

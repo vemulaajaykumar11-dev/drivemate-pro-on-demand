@@ -16,6 +16,7 @@ import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as DriverRegisterRouteImport } from './routes/driver.register'
 import { Route as DriverPendingRouteImport } from './routes/driver.pending'
+import { Route as DriverNotificationsRouteImport } from './routes/driver.notifications'
 import { Route as DriverEarningsRouteImport } from './routes/driver.earnings'
 import { Route as DriverBookingsRouteImport } from './routes/driver.bookings'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
@@ -59,6 +60,11 @@ const DriverRegisterRoute = DriverRegisterRouteImport.update({
 const DriverPendingRoute = DriverPendingRouteImport.update({
   id: '/pending',
   path: '/pending',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverNotificationsRoute = DriverNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => DriverRoute,
 } as any)
 const DriverEarningsRoute = DriverEarningsRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer': typeof CustomerIndexRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
   '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
+    | '/driver/notifications'
     | '/driver/pending'
     | '/driver/register'
     | '/customer/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
+    | '/driver/notifications'
     | '/driver/pending'
     | '/driver/register'
     | '/customer'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/customer/support'
     | '/driver/bookings'
     | '/driver/earnings'
+    | '/driver/notifications'
     | '/driver/pending'
     | '/driver/register'
     | '/customer/'
@@ -270,6 +282,13 @@ declare module '@tanstack/react-router' {
       path: '/pending'
       fullPath: '/driver/pending'
       preLoaderRoute: typeof DriverPendingRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/notifications': {
+      id: '/driver/notifications'
+      path: '/notifications'
+      fullPath: '/driver/notifications'
+      preLoaderRoute: typeof DriverNotificationsRouteImport
       parentRoute: typeof DriverRoute
     }
     '/driver/earnings': {
@@ -365,6 +384,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 interface DriverRouteChildren {
   DriverBookingsRoute: typeof DriverBookingsRoute
   DriverEarningsRoute: typeof DriverEarningsRoute
+  DriverNotificationsRoute: typeof DriverNotificationsRoute
   DriverPendingRoute: typeof DriverPendingRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
   DriverIndexRoute: typeof DriverIndexRoute
@@ -374,6 +394,7 @@ interface DriverRouteChildren {
 const DriverRouteChildren: DriverRouteChildren = {
   DriverBookingsRoute: DriverBookingsRoute,
   DriverEarningsRoute: DriverEarningsRoute,
+  DriverNotificationsRoute: DriverNotificationsRoute,
   DriverPendingRoute: DriverPendingRoute,
   DriverRegisterRoute: DriverRegisterRoute,
   DriverIndexRoute: DriverIndexRoute,
