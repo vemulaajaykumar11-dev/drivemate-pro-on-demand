@@ -20,6 +20,7 @@ import { Route as CustomerSupportRouteImport } from './routes/customer.support'
 import { Route as CustomerSosRouteImport } from './routes/customer.sos'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
+import { Route as DriverActiveIdRouteImport } from './routes/driver.active.$id'
 import { Route as CustomerTrackIdRouteImport } from './routes/customer.track.$id'
 import { Route as CustomerBookServiceRouteImport } from './routes/customer.book.$service'
 
@@ -78,6 +79,11 @@ const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => CustomerRoute,
 } as any)
+const DriverActiveIdRoute = DriverActiveIdRouteImport.update({
+  id: '/active/$id',
+  path: '/active/$id',
+  getParentRoute: () => DriverRoute,
+} as any)
 const CustomerTrackIdRoute = CustomerTrackIdRouteImport.update({
   id: '/track/$id',
   path: '/track/$id',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/driver/': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
   '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/driver': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
   '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/driver/': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
   '/customer/track/$id': typeof CustomerTrackIdRoute
+  '/driver/active/$id': typeof DriverActiveIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/driver/'
     | '/customer/book/$service'
     | '/customer/track/$id'
+    | '/driver/active/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/driver'
     | '/customer/book/$service'
     | '/customer/track/$id'
+    | '/driver/active/$id'
   id:
     | '__root__'
     | '/'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/driver/'
     | '/customer/book/$service'
     | '/customer/track/$id'
+    | '/driver/active/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -264,6 +276,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerBookingsRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/driver/active/$id': {
+      id: '/driver/active/$id'
+      path: '/active/$id'
+      fullPath: '/driver/active/$id'
+      preLoaderRoute: typeof DriverActiveIdRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/customer/track/$id': {
       id: '/customer/track/$id'
       path: '/track/$id'
@@ -309,12 +328,14 @@ interface DriverRouteChildren {
   DriverPendingRoute: typeof DriverPendingRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
   DriverIndexRoute: typeof DriverIndexRoute
+  DriverActiveIdRoute: typeof DriverActiveIdRoute
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
   DriverPendingRoute: DriverPendingRoute,
   DriverRegisterRoute: DriverRegisterRoute,
   DriverIndexRoute: DriverIndexRoute,
+  DriverActiveIdRoute: DriverActiveIdRoute,
 }
 
 const DriverRouteWithChildren =
