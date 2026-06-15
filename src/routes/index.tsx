@@ -28,6 +28,10 @@ function AuthFlow() {
   const [step, setStep] = useState<Step>("splash");
 
   useEffect(() => {
+    // Only auto-redirect on the initial splash. Once the user is in the
+    // sign-up flow (login → otp → profile → role), let them finish picking
+    // a role before navigating away.
+    if (step !== "splash") return;
     if (authed) {
       if (role === "driver") {
         if (driverVerification === "approved") nav({ to: "/driver" });
@@ -40,9 +44,10 @@ function AuthFlow() {
     }
     const t = setTimeout(() => setStep("login"), 1400);
     return () => clearTimeout(t);
-  }, [authed, role, driverVerification, nav]);
+  }, [authed, role, driverVerification, nav, step]);
 
-  if (step === "splash" || authed) return <Splash />;
+  if (step === "splash") return <Splash />;
+
   if (step === "login") return <Login onNext={() => setStep("otp")} />;
   if (step === "otp") return <Otp onNext={() => setStep("profile")} />;
   if (step === "profile") return <Profile onNext={() => setStep("role")} />;

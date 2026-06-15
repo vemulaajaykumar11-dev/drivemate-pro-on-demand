@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useApp, servicePricing, type ServiceType } from "@/lib/store";
 import { Clock, Sun, Calendar, CalendarRange, ChevronRight, Sparkles } from "lucide-react";
 import { StatusPill } from "@/components/app-chrome";
+
 
 export const Route = createFileRoute("/customer/")({
   component: CustomerHome,
@@ -16,12 +18,17 @@ const services: { key: ServiceType; icon: React.ElementType; gradient: string }[
 
 function CustomerHome() {
   const { user, bookings } = useApp();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const recent = bookings.slice(0, 3);
+  const firstName = mounted ? (user?.name?.split(" ")[0] || "there") : "there";
+
 
   return (
     <div className="px-4 pt-4">
       <div className="gradient-primary mb-5 overflow-hidden rounded-2xl p-5">
-        <div className="text-xs opacity-80">Hi {user?.name?.split(" ")[0] || "there"} 👋</div>
+        <div className="text-xs opacity-80">Hi {firstName} 👋</div>
+
         <div className="mt-1 font-display text-xl font-bold leading-tight">Where would you like to go today?</div>
         <div className="mt-3 flex items-center gap-1.5 text-[11px] opacity-90">
           <Sparkles className="h-3.5 w-3.5" /> Verified drivers · Live tracking · Insured trips
