@@ -1,4 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Bell, Home, Calendar, LifeBuoy, Wallet, ChevronDown, User } from "lucide-react";
 import { useApp, type Role } from "@/lib/store";
 import {
@@ -15,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 export function AppHeader({ title }: { title?: string }) {
   const { user, role, setRole, driverVerification } = useApp();
   const nav = useNavigate();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const switchRole = (r: Role) => {
     setRole(r);
@@ -32,7 +35,7 @@ export function AppHeader({ title }: { title?: string }) {
       <Avatar className="h-9 w-9 ring-2 ring-primary/20">
         <AvatarImage src={user?.avatar} />
         <AvatarFallback className="bg-primary-soft text-primary text-sm font-semibold">
-          {user?.name?.[0]?.toUpperCase() ?? "U"}
+          {mounted ? (user?.name?.[0]?.toUpperCase() ?? "U") : "U"}
         </AvatarFallback>
       </Avatar>
       <div className="flex-1 text-center">
@@ -76,14 +79,14 @@ export function BottomNav() {
       ? [
           { to: "/customer", icon: Home, label: "Home" },
           { to: "/customer/bookings", icon: Calendar, label: "Bookings" },
-          { to: "/customer/notifications", icon: Bell, label: "Alerts" },
           { to: "/customer/support", icon: LifeBuoy, label: "Support" },
+          { to: "/customer/profile", icon: User, label: "Profile" },
         ]
       : [
           { to: "/driver", icon: Home, label: "Home" },
           { to: "/driver/bookings", icon: Calendar, label: "Trips" },
           { to: "/driver/earnings", icon: Wallet, label: "Earnings" },
-          { to: "/driver/notifications", icon: Bell, label: "Alerts" },
+          { to: "/driver/profile", icon: User, label: "Profile" },
         ];
 
   return (
