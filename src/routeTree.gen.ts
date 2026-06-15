@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DriverRouteImport } from './routes/driver'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
@@ -19,6 +20,11 @@ import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings
 import { Route as CustomerTrackIdRouteImport } from './routes/customer.track.$id'
 import { Route as CustomerBookServiceRouteImport } from './routes/customer.book.$service'
 
+const DriverRoute = DriverRouteImport.update({
+  id: '/driver',
+  path: '/driver',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CustomerRoute = CustomerRouteImport.update({
   id: '/customer',
   path: '/customer',
@@ -68,6 +74,7 @@ const CustomerBookServiceRoute = CustomerBookServiceRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/driver': typeof DriverRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/driver': typeof DriverRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/driver': typeof DriverRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/customer'
+    | '/driver'
     | '/customer/bookings'
     | '/customer/notifications'
     | '/customer/sos'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/driver'
     | '/customer/bookings'
     | '/customer/notifications'
     | '/customer/sos'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/customer'
+    | '/driver'
     | '/customer/bookings'
     | '/customer/notifications'
     | '/customer/sos'
@@ -136,10 +148,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CustomerRoute: typeof CustomerRouteWithChildren
+  DriverRoute: typeof DriverRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/driver': {
+      id: '/driver'
+      path: '/driver'
+      fullPath: '/driver'
+      preLoaderRoute: typeof DriverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/customer': {
       id: '/customer'
       path: '/customer'
@@ -233,6 +253,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CustomerRoute: CustomerRouteWithChildren,
+  DriverRoute: DriverRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
