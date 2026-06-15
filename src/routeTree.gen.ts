@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as DriverRegisterRouteImport } from './routes/driver.register'
+import { Route as DriverPendingRouteImport } from './routes/driver.pending'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
 import { Route as CustomerSosRouteImport } from './routes/customer.sos'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
@@ -50,6 +51,11 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
 const DriverRegisterRoute = DriverRegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverPendingRoute = DriverPendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
   getParentRoute: () => DriverRoute,
 } as any)
 const CustomerSupportRoute = CustomerSupportRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
+  '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
+  '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer': typeof CustomerIndexRoute
   '/driver': typeof DriverIndexRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
+  '/driver/pending': typeof DriverPendingRoute
   '/driver/register': typeof DriverRegisterRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/customer/notifications'
     | '/customer/sos'
     | '/customer/support'
+    | '/driver/pending'
     | '/driver/register'
     | '/customer/'
     | '/driver/'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/customer/notifications'
     | '/customer/sos'
     | '/customer/support'
+    | '/driver/pending'
     | '/driver/register'
     | '/customer'
     | '/driver'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/customer/notifications'
     | '/customer/sos'
     | '/customer/support'
+    | '/driver/pending'
     | '/driver/register'
     | '/customer/'
     | '/driver/'
@@ -215,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/driver/register'
       preLoaderRoute: typeof DriverRegisterRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/pending': {
+      id: '/driver/pending'
+      path: '/pending'
+      fullPath: '/driver/pending'
+      preLoaderRoute: typeof DriverPendingRouteImport
       parentRoute: typeof DriverRoute
     }
     '/customer/support': {
@@ -287,11 +306,13 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 )
 
 interface DriverRouteChildren {
+  DriverPendingRoute: typeof DriverPendingRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
   DriverIndexRoute: typeof DriverIndexRoute
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
+  DriverPendingRoute: DriverPendingRoute,
   DriverRegisterRoute: DriverRegisterRoute,
   DriverIndexRoute: DriverIndexRoute,
 }
