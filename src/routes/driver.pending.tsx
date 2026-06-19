@@ -8,7 +8,7 @@ export const Route = createFileRoute("/driver/pending")({
 });
 
 function Pending() {
-  const { driverVerification, setDriverVerification } = useApp();
+  const { driverVerification } = useApp();
   const nav = useNavigate();
 
   return (
@@ -52,8 +52,8 @@ function Pending() {
             Go to dashboard
           </Button>
         ) : (
-          <Button size="lg" className="h-12 w-full rounded-xl" onClick={() => setDriverVerification("approved")}>
-            Simulate approval
+          <Button size="lg" disabled className="h-12 w-full rounded-xl">
+            Awaiting review
           </Button>
         )}
         <Button variant="outline" className="h-11 w-full rounded-xl" onClick={() => nav({ to: "/customer" })}>
