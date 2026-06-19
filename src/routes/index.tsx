@@ -77,10 +77,25 @@ function Splash() {
   );
 }
 
-function Login({ onNext }: { onNext: () => void }) {
-  const { login } = useApp();
+function Login({ onSent }: { onSent: (phoneE164: string) => void }) {
   const [phone, setPhone] = useState("");
-  const valid = phone.replace(/\D/g, "").length >= 10;
+  const [sending, setSending] = useState(false);
+  const digits = phone.replace(/\D/g, "");
+  const valid = digits.length >= 10;
+
+  const sendOtp = async () => {
+    setSending(true);
+    const phoneE164 = "+91" + digits;
+    const { error } = await supabase.auth.signInWithOtp({ phone: phoneE164 });
+    setSending(false);
+    if (error) {
+      toast.error(error.message || "Could not send OTP");
+      return;
+    }
+    toast.success("OTP sent");
+    onSent(phoneE164);
+  };
+
   return (
     <div className="flex min-h-[100dvh] flex-col px-6 pt-16 pb-10">
       <div className="mb-10">
@@ -97,16 +112,8 @@ function Login({ onNext }: { onNext: () => void }) {
       </div>
       <p className="mt-3 text-xs text-muted-foreground">We'll send a 6-digit OTP to verify your number.</p>
       <div className="flex-1" />
-      <Button
-        disabled={!valid}
-        size="lg"
-        className="h-12 rounded-xl text-base"
-        onClick={() => {
-          login("+91 " + phone);
-          onNext();
-        }}
-      >
-        Send OTP
+      <Button disabled={!valid || sending} size="lg" className="h-12 rounded-xl text-base" onClick={sendOtp}>
+        {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send OTP"}
       </Button>
       <p className="mt-4 text-center text-[11px] text-muted-foreground">
         By continuing, you agree to our <span className="text-primary">Terms</span> and <span className="text-primary">Privacy Policy</span>.
@@ -115,12 +122,36 @@ function Login({ onNext }: { onNext: () => void }) {
   );
 }
 
-function Otp({ onNext }: { onNext: () => void }) {
+function Otp({ phone, onVerified, onBack }: { phone: string; onVerified: () => void; onBack: () => void }) {
   const [val, setVal] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [resending, setResending] = useState(false);
+
+  const verify = async () => {
+    setVerifying(true);
+    const { error } = await supabase.auth.verifyOtp({ phone, token: val, type: "sms" });
+    setVerifying(false);
+    if (error) {
+      toast.error(error.message || "Invalid OTP");
+      return;
+    }
+    onVerified();
+  };
+
+  const resend = async () => {
+    setResending(true);
+    const { error } = await supabase.auth.signInWithOtp({ phone });
+    setResending(false);
+    if (error) toast.error(error.message);
+    else toast.success("OTP resent");
+  };
+
   return (
     <div className="flex min-h-[100dvh] flex-col px-6 pt-16 pb-10">
       <h1 className="font-display text-2xl font-bold">Verify OTP</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Enter the 6-digit code we sent to your phone.</p>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Enter the 6-digit code we sent to <span className="font-medium text-foreground">{phone}</span>.
+      </p>
       <div className="mt-10 flex justify-center">
         <InputOTP maxLength={6} value={val} onChange={setVal}>
           <InputOTPGroup>
@@ -130,10 +161,15 @@ function Otp({ onNext }: { onNext: () => void }) {
           </InputOTPGroup>
         </InputOTP>
       </div>
-      <button className="mt-6 text-center text-xs text-primary">Resend code in 30s</button>
+      <div className="mt-6 flex justify-center gap-4 text-xs">
+        <button className="text-muted-foreground" onClick={onBack}>Change number</button>
+        <button className="text-primary disabled:opacity-50" disabled={resending} onClick={resend}>
+          {resending ? "Resending…" : "Resend code"}
+        </button>
+      </div>
       <div className="flex-1" />
-      <Button disabled={val.length < 6} size="lg" className="h-12 rounded-xl text-base" onClick={onNext}>
-        Verify & Continue
+      <Button disabled={val.length < 6 || verifying} size="lg" className="h-12 rounded-xl text-base" onClick={verify}>
+        {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : "Verify & Continue"}
       </Button>
     </div>
   );
