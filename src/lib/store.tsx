@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export type Role = "customer" | "driver";
 export type ServiceType = "hourly" | "daily" | "weekly" | "monthly";
@@ -49,7 +50,7 @@ interface AppState {
   notifications: { id: string; title: string; body: string; time: string; role: Role }[];
 }
 
-const STORAGE_KEY = "drivemate-state-v1";
+const LOCAL_KEY = "drivemate-local-v1"; // prototype-only data (bookings, notifications)
 
 const seedBookings: Booking[] = [
   {
@@ -132,44 +133,128 @@ const initialState: AppState = {
 
 interface Ctx extends AppState {
   set: (patch: Partial<AppState>) => void;
-  login: (phone: string) => void;
-  completeProfile: (u: AppUser) => void;
-  setRole: (r: Role) => void;
+  completeProfile: (u: { name: string; email: string }) => Promise<void>;
+  setRole: (r: Role) => Promise<void>;
   addBooking: (b: Booking) => void;
   updateBooking: (id: string, patch: Partial<Booking>) => void;
   acceptRequest: (id: string) => void;
   rejectRequest: (id: string) => void;
   setDriverVerification: (v: DriverVerification) => void;
   setDriverStatus: (s: DriverStatus) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AppCtx = createContext<Ctx | null>(null);
 
+type ProfileRow = {
+  name: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  mode: Role;
+  driver_verification: DriverVerification;
+};
+
 export function AppProvider({ children }: { children: ReactNode }) {
+  // prototype-only data persisted locally; identity comes from Supabase.
   const [state, setState] = useState<AppState>(() => {
     if (typeof window === "undefined") return initialState;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return { ...initialState, ...JSON.parse(raw) };
+      const raw = localStorage.getItem(LOCAL_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw) as Partial<AppState>;
+        return {
+          ...initialState,
+          bookings: saved.bookings ?? initialState.bookings,
+          pendingDriverRequests: saved.pendingDriverRequests ?? initialState.pendingDriverRequests,
+          notifications: saved.notifications ?? initialState.notifications,
+        };
+      }
     } catch {}
     return initialState;
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(
+        LOCAL_KEY,
+        JSON.stringify({
+          bookings: state.bookings,
+          pendingDriverRequests: state.pendingDriverRequests,
+          notifications: state.notifications,
+        }),
+      );
     } catch {}
-  }, [state]);
+  }, [state.bookings, state.pendingDriverRequests, state.notifications]);
+
+  // Sync identity from Supabase session + profile row.
+  useEffect(() => {
+    let cancelled = false;
+
+    const applyProfile = async (userId: string | null, fallbackEmail = "", fallbackPhone = "") => {
+      if (!userId) {
+        if (!cancelled) {
+          setState((s) => ({ ...s, authed: false, user: null, driverVerification: "none", role: "customer" }));
+        }
+        return;
+      }
+      const { data } = await supabase
+        .from("profiles")
+        .select("name, phone, avatar_url, mode, driver_verification")
+        .eq("id", userId)
+        .maybeSingle<ProfileRow>();
+      if (cancelled) return;
+      setState((s) => ({
+        ...s,
+        authed: true,
+        user: {
+          name: data?.name ?? "",
+          email: fallbackEmail,
+          phone: data?.phone ?? fallbackPhone,
+          avatar: data?.avatar_url ?? undefined,
+        },
+        role: data?.mode ?? "customer",
+        driverVerification: data?.driver_verification ?? "none",
+      }));
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      const u = data.session?.user;
+      applyProfile(u?.id ?? null, u?.email ?? "", u?.phone ?? "");
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      const u = session?.user;
+      applyProfile(u?.id ?? null, u?.email ?? "", u?.phone ?? "");
+    });
+
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
 
   const set = (patch: Partial<AppState>) => setState((s) => ({ ...s, ...patch }));
 
   const ctx: Ctx = {
     ...state,
     set,
-    login: (phone) => set({ user: { name: state.user?.name ?? "", phone, email: state.user?.email ?? "" } }),
-    completeProfile: (u) => set({ authed: true, user: u }),
-    setRole: (role) => set({ role }),
+    completeProfile: async ({ name, email }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+      await supabase
+        .from("profiles")
+        .upsert({ id: user.id, name, phone: user.phone ?? state.user?.phone ?? null }, { onConflict: "id" });
+      setState((s) => ({
+        ...s,
+        user: { name, email, phone: user.phone ?? s.user?.phone ?? "" },
+      }));
+    },
+    setRole: async (role) => {
+      setState((s) => ({ ...s, role }));
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) await supabase.from("profiles").update({ mode: role }).eq("id", user.id);
+    },
     addBooking: (b) => setState((s) => ({ ...s, bookings: [b, ...s.bookings] })),
     updateBooking: (id, patch) =>
       setState((s) => ({ ...s, bookings: s.bookings.map((b) => (b.id === id ? { ...b, ...patch } : b)) })),
@@ -192,11 +277,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }),
     rejectRequest: (id) =>
       setState((s) => ({ ...s, pendingDriverRequests: s.pendingDriverRequests.filter((r) => r.id !== id) })),
-    setDriverVerification: (v) => set({ driverVerification: v }),
+    setDriverVerification: (v) => set({ driverVerification: v }), // local UI hint only; DB column is admin-only
     setDriverStatus: (s) => set({ driverStatus: s }),
-    logout: () => {
-      localStorage.removeItem(STORAGE_KEY);
-      setState(initialState);
+    logout: async () => {
+      await supabase.auth.signOut();
+      setState((s) => ({ ...s, authed: false, user: null, driverVerification: "none", role: "customer" }));
     },
   };
 
