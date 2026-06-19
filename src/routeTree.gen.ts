@@ -14,9 +14,6 @@ import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DriverIndexRouteImport } from './routes/driver.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
-import { Route as DriverVerificationRouteImport } from './routes/driver.verification'
-import { Route as DriverSupportRouteImport } from './routes/driver.support'
-import { Route as DriverReviewsRouteImport } from './routes/driver.reviews'
 import { Route as DriverRegisterRouteImport } from './routes/driver.register'
 import { Route as DriverProfileRouteImport } from './routes/driver.profile'
 import { Route as DriverPendingRouteImport } from './routes/driver.pending'
@@ -25,10 +22,8 @@ import { Route as DriverEarningsRouteImport } from './routes/driver.earnings'
 import { Route as DriverBookingsRouteImport } from './routes/driver.bookings'
 import { Route as CustomerSupportRouteImport } from './routes/customer.support'
 import { Route as CustomerSosRouteImport } from './routes/customer.sos'
-import { Route as CustomerReferRouteImport } from './routes/customer.refer'
 import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
-import { Route as CustomerGstRouteImport } from './routes/customer.gst'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
 import { Route as DriverActiveIdRouteImport } from './routes/driver.active.$id'
 import { Route as CustomerTrackIdRouteImport } from './routes/customer.track.$id'
@@ -58,21 +53,6 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CustomerRoute,
-} as any)
-const DriverVerificationRoute = DriverVerificationRouteImport.update({
-  id: '/verification',
-  path: '/verification',
-  getParentRoute: () => DriverRoute,
-} as any)
-const DriverSupportRoute = DriverSupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => DriverRoute,
-} as any)
-const DriverReviewsRoute = DriverReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => DriverRoute,
 } as any)
 const DriverRegisterRoute = DriverRegisterRouteImport.update({
   id: '/register',
@@ -114,11 +94,6 @@ const CustomerSosRoute = CustomerSosRouteImport.update({
   path: '/sos',
   getParentRoute: () => CustomerRoute,
 } as any)
-const CustomerReferRoute = CustomerReferRouteImport.update({
-  id: '/refer',
-  path: '/refer',
-  getParentRoute: () => CustomerRoute,
-} as any)
 const CustomerProfileRoute = CustomerProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -127,11 +102,6 @@ const CustomerProfileRoute = CustomerProfileRouteImport.update({
 const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
-  getParentRoute: () => CustomerRoute,
-} as any)
-const CustomerGstRoute = CustomerGstRouteImport.update({
-  id: '/gst',
-  path: '/gst',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
@@ -160,10 +130,8 @@ export interface FileRoutesByFullPath {
   '/customer': typeof CustomerRouteWithChildren
   '/driver': typeof DriverRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
-  '/customer/gst': typeof CustomerGstRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/refer': typeof CustomerReferRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
@@ -172,9 +140,6 @@ export interface FileRoutesByFullPath {
   '/driver/pending': typeof DriverPendingRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
-  '/driver/reviews': typeof DriverReviewsRoute
-  '/driver/support': typeof DriverSupportRoute
-  '/driver/verification': typeof DriverVerificationRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -184,10 +149,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customer/bookings': typeof CustomerBookingsRoute
-  '/customer/gst': typeof CustomerGstRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/refer': typeof CustomerReferRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
@@ -196,9 +159,6 @@ export interface FileRoutesByTo {
   '/driver/pending': typeof DriverPendingRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
-  '/driver/reviews': typeof DriverReviewsRoute
-  '/driver/support': typeof DriverSupportRoute
-  '/driver/verification': typeof DriverVerificationRoute
   '/customer': typeof CustomerIndexRoute
   '/driver': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -211,10 +171,8 @@ export interface FileRoutesById {
   '/customer': typeof CustomerRouteWithChildren
   '/driver': typeof DriverRouteWithChildren
   '/customer/bookings': typeof CustomerBookingsRoute
-  '/customer/gst': typeof CustomerGstRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/refer': typeof CustomerReferRoute
   '/customer/sos': typeof CustomerSosRoute
   '/customer/support': typeof CustomerSupportRoute
   '/driver/bookings': typeof DriverBookingsRoute
@@ -223,9 +181,6 @@ export interface FileRoutesById {
   '/driver/pending': typeof DriverPendingRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/register': typeof DriverRegisterRoute
-  '/driver/reviews': typeof DriverReviewsRoute
-  '/driver/support': typeof DriverSupportRoute
-  '/driver/verification': typeof DriverVerificationRoute
   '/customer/': typeof CustomerIndexRoute
   '/driver/': typeof DriverIndexRoute
   '/customer/book/$service': typeof CustomerBookServiceRoute
@@ -239,10 +194,8 @@ export interface FileRouteTypes {
     | '/customer'
     | '/driver'
     | '/customer/bookings'
-    | '/customer/gst'
     | '/customer/notifications'
     | '/customer/profile'
-    | '/customer/refer'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
@@ -251,9 +204,6 @@ export interface FileRouteTypes {
     | '/driver/pending'
     | '/driver/profile'
     | '/driver/register'
-    | '/driver/reviews'
-    | '/driver/support'
-    | '/driver/verification'
     | '/customer/'
     | '/driver/'
     | '/customer/book/$service'
@@ -263,10 +213,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/customer/bookings'
-    | '/customer/gst'
     | '/customer/notifications'
     | '/customer/profile'
-    | '/customer/refer'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
@@ -275,9 +223,6 @@ export interface FileRouteTypes {
     | '/driver/pending'
     | '/driver/profile'
     | '/driver/register'
-    | '/driver/reviews'
-    | '/driver/support'
-    | '/driver/verification'
     | '/customer'
     | '/driver'
     | '/customer/book/$service'
@@ -289,10 +234,8 @@ export interface FileRouteTypes {
     | '/customer'
     | '/driver'
     | '/customer/bookings'
-    | '/customer/gst'
     | '/customer/notifications'
     | '/customer/profile'
-    | '/customer/refer'
     | '/customer/sos'
     | '/customer/support'
     | '/driver/bookings'
@@ -301,9 +244,6 @@ export interface FileRouteTypes {
     | '/driver/pending'
     | '/driver/profile'
     | '/driver/register'
-    | '/driver/reviews'
-    | '/driver/support'
-    | '/driver/verification'
     | '/customer/'
     | '/driver/'
     | '/customer/book/$service'
@@ -353,27 +293,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/customer/'
       preLoaderRoute: typeof CustomerIndexRouteImport
       parentRoute: typeof CustomerRoute
-    }
-    '/driver/verification': {
-      id: '/driver/verification'
-      path: '/verification'
-      fullPath: '/driver/verification'
-      preLoaderRoute: typeof DriverVerificationRouteImport
-      parentRoute: typeof DriverRoute
-    }
-    '/driver/support': {
-      id: '/driver/support'
-      path: '/support'
-      fullPath: '/driver/support'
-      preLoaderRoute: typeof DriverSupportRouteImport
-      parentRoute: typeof DriverRoute
-    }
-    '/driver/reviews': {
-      id: '/driver/reviews'
-      path: '/reviews'
-      fullPath: '/driver/reviews'
-      preLoaderRoute: typeof DriverReviewsRouteImport
-      parentRoute: typeof DriverRoute
     }
     '/driver/register': {
       id: '/driver/register'
@@ -431,13 +350,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerSosRouteImport
       parentRoute: typeof CustomerRoute
     }
-    '/customer/refer': {
-      id: '/customer/refer'
-      path: '/refer'
-      fullPath: '/customer/refer'
-      preLoaderRoute: typeof CustomerReferRouteImport
-      parentRoute: typeof CustomerRoute
-    }
     '/customer/profile': {
       id: '/customer/profile'
       path: '/profile'
@@ -450,13 +362,6 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/customer/notifications'
       preLoaderRoute: typeof CustomerNotificationsRouteImport
-      parentRoute: typeof CustomerRoute
-    }
-    '/customer/gst': {
-      id: '/customer/gst'
-      path: '/gst'
-      fullPath: '/customer/gst'
-      preLoaderRoute: typeof CustomerGstRouteImport
       parentRoute: typeof CustomerRoute
     }
     '/customer/bookings': {
@@ -492,10 +397,8 @@ declare module '@tanstack/react-router' {
 
 interface CustomerRouteChildren {
   CustomerBookingsRoute: typeof CustomerBookingsRoute
-  CustomerGstRoute: typeof CustomerGstRoute
   CustomerNotificationsRoute: typeof CustomerNotificationsRoute
   CustomerProfileRoute: typeof CustomerProfileRoute
-  CustomerReferRoute: typeof CustomerReferRoute
   CustomerSosRoute: typeof CustomerSosRoute
   CustomerSupportRoute: typeof CustomerSupportRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
@@ -505,10 +408,8 @@ interface CustomerRouteChildren {
 
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerBookingsRoute: CustomerBookingsRoute,
-  CustomerGstRoute: CustomerGstRoute,
   CustomerNotificationsRoute: CustomerNotificationsRoute,
   CustomerProfileRoute: CustomerProfileRoute,
-  CustomerReferRoute: CustomerReferRoute,
   CustomerSosRoute: CustomerSosRoute,
   CustomerSupportRoute: CustomerSupportRoute,
   CustomerIndexRoute: CustomerIndexRoute,
@@ -527,9 +428,6 @@ interface DriverRouteChildren {
   DriverPendingRoute: typeof DriverPendingRoute
   DriverProfileRoute: typeof DriverProfileRoute
   DriverRegisterRoute: typeof DriverRegisterRoute
-  DriverReviewsRoute: typeof DriverReviewsRoute
-  DriverSupportRoute: typeof DriverSupportRoute
-  DriverVerificationRoute: typeof DriverVerificationRoute
   DriverIndexRoute: typeof DriverIndexRoute
   DriverActiveIdRoute: typeof DriverActiveIdRoute
 }
@@ -541,9 +439,6 @@ const DriverRouteChildren: DriverRouteChildren = {
   DriverPendingRoute: DriverPendingRoute,
   DriverProfileRoute: DriverProfileRoute,
   DriverRegisterRoute: DriverRegisterRoute,
-  DriverReviewsRoute: DriverReviewsRoute,
-  DriverSupportRoute: DriverSupportRoute,
-  DriverVerificationRoute: DriverVerificationRoute,
   DriverIndexRoute: DriverIndexRoute,
   DriverActiveIdRoute: DriverActiveIdRoute,
 }
