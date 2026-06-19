@@ -1,12 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Car, User as UserIcon, Wallet, ChevronRight, ShieldCheck } from "lucide-react";
+import { Car, User as UserIcon, Wallet, ChevronRight, ShieldCheck, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
