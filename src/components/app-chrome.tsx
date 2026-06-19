@@ -62,7 +62,7 @@ export function AppHeader({ title }: { title?: string }) {
             <Wallet className="h-4 w-4" /> Driver {role === "driver" && "✓"}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => nav({ to: "/" })} className="text-destructive">
+          <DropdownMenuItem onClick={() => { logout(); nav({ to: "/" }); }} className="text-destructive">
             Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>
