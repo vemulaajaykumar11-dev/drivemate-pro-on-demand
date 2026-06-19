@@ -177,8 +177,8 @@ function Otp({ phone, onVerified, onBack }: { phone: string; onVerified: () => v
 
 function Profile({ onNext }: { onNext: () => void }) {
   const { completeProfile, user } = useApp();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(user?.name ?? "");
+  const [email, setEmail] = useState(user?.email ?? "");
   return (
     <div className="flex min-h-[100dvh] flex-col px-6 pt-12 pb-10">
       <h1 className="font-display text-2xl font-bold">Complete your profile</h1>
