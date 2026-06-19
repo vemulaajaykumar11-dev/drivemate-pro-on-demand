@@ -25,16 +25,19 @@ export const Route = createFileRoute("/")({
 type Step = "splash" | "login" | "otp" | "profile" | "role";
 
 function AuthFlow() {
-  const { authed, role, driverVerification } = useApp();
+  const { authed, user, role, driverVerification } = useApp();
   const nav = useNavigate();
   const [step, setStep] = useState<Step>("splash");
+  const [phoneE164, setPhoneE164] = useState("");
 
   useEffect(() => {
-    // Only auto-redirect on the initial splash. Once the user is in the
-    // sign-up flow (login → otp → profile → role), let them finish picking
-    // a role before navigating away.
     if (step !== "splash") return;
     if (authed) {
+      // If profile name is missing, force them through profile + role setup.
+      if (!user?.name) {
+        setStep("profile");
+        return;
+      }
       if (role === "driver") {
         if (driverVerification === "approved") nav({ to: "/driver" });
         else if (driverVerification === "pending") nav({ to: "/driver/pending" });
@@ -46,12 +49,13 @@ function AuthFlow() {
     }
     const t = setTimeout(() => setStep("login"), 1400);
     return () => clearTimeout(t);
-  }, [authed, role, driverVerification, nav, step]);
+  }, [authed, user, role, driverVerification, nav, step]);
 
   if (step === "splash") return <Splash />;
-
-  if (step === "login") return <Login onNext={() => setStep("otp")} />;
-  if (step === "otp") return <Otp onNext={() => setStep("profile")} />;
+  if (step === "login")
+    return <Login onSent={(p) => { setPhoneE164(p); setStep("otp"); }} />;
+  if (step === "otp")
+    return <Otp phone={phoneE164} onBack={() => setStep("login")} onVerified={() => setStep("profile")} />;
   if (step === "profile") return <Profile onNext={() => setStep("role")} />;
   return <RoleSelect />;
 }
