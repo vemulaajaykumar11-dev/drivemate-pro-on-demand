@@ -210,8 +210,8 @@ function Profile({ onNext }: { onNext: () => void }) {
         disabled={!name || !email}
         size="lg"
         className="h-12 rounded-xl text-base"
-        onClick={() => {
-          completeProfile({ name, email, phone: user?.phone ?? "" });
+        onClick={async () => {
+          await completeProfile({ name, email });
           onNext();
         }}
       >
