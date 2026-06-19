@@ -8,7 +8,7 @@ export const Route = createFileRoute("/driver/pending")({
 });
 
 function Pending() {
-  const { driverVerification, setDriverVerification } = useApp();
+  const { driverVerification } = useApp();
   const nav = useNavigate();
 
   return (
