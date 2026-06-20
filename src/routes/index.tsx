@@ -29,6 +29,8 @@ function AuthFlow() {
 
   useEffect(() => {
     if (authed) {
+      // Mid-signup: let the user pick a role first.
+      if (step === "profile" || step === "role") return;
       if (role === "driver") {
         if (driverVerification === "approved") nav({ to: "/driver" });
         else if (driverVerification === "pending") nav({ to: "/driver/pending" });
@@ -40,7 +42,7 @@ function AuthFlow() {
     }
     const t = setTimeout(() => setStep("login"), 1400);
     return () => clearTimeout(t);
-  }, [authed, role, driverVerification, nav]);
+  }, [authed, role, driverVerification, nav, step]);
 
   if (step === "splash" || authed) return <Splash />;
   if (step === "login") return <Login onNext={() => setStep("otp")} />;
